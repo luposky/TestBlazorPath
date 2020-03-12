@@ -42,15 +42,23 @@ namespace TestBlazorPath.Server
             }
 
             app.UseHttpsRedirection();
-            app.UseBlazorFrameworkFiles();
+            app.UseBlazorFrameworkFiles("/portal");
             app.UseStaticFiles();
+
+            app.Map("/portal", child =>
+            {
+                child.UseRouting();
+                child.UseEndpoints(endpoints =>
+                {
+                    endpoints.MapFallbackToFile("portal/index.html");
+                });
+            });
 
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapFallbackToFile("index.html");
             });
         }
     }
